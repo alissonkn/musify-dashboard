@@ -186,16 +186,17 @@
   <header>
     <div>
       <h1>Musify Dashboard</h1>
-      <div class="sub" id="range">Your Spotify and YouTube history, visualised</div>
+      <div class="sub" id="range" data-i18n="tagline">Your Spotify and YouTube history, visualised</div>
     </div>
     <div class="head-controls">
-      <button class="btn" id="howBtn" type="button">How to get your data</button>
-      <label class="year-select" id="yearWrap" hidden>Year
+      <select id="lang" data-i18n-aria="language" aria-label="Language"></select>
+      <button class="btn" id="howBtn" type="button" data-i18n="howBtn">How to get your data</button>
+      <label class="year-select" id="yearWrap" hidden><span data-i18n="year">Year</span>
         <select id="year"><option value="all">All years</option></select>
       </label>
-      <button class="btn primary" id="shareBtn" type="button" hidden>Share to Stories</button>
-      <button class="btn" id="uploadBtn" type="button" hidden>Upload another file</button>
-      <button class="btn" id="themeBtn" type="button">Toggle theme</button>
+      <button class="btn primary" id="shareBtn" type="button" hidden data-i18n="shareBtn">Share to Stories</button>
+      <button class="btn" id="uploadBtn" type="button" hidden data-i18n="uploadAnother">Upload another file</button>
+      <button class="btn" id="themeBtn" type="button" data-i18n="theme">Toggle theme</button>
     </div>
   </header>
 
@@ -203,20 +204,20 @@
 
   <!-- Upload screen (shown when no data is loaded) -->
   <section class="card upload" id="uploadView" hidden>
-    <div class="seg source-pick" role="group" aria-label="Choose your data source" id="sourceSeg">
+    <div class="seg source-pick" role="group" aria-label="Choose your data source" data-i18n-aria="sourceAria" id="sourceSeg">
       <button type="button" data-source="spotify" aria-pressed="true">Spotify</button>
       <button type="button" data-source="youtube" aria-pressed="false">YouTube</button>
     </div>
     <h2 id="uploadTitle">Upload your Spotify data</h2>
     <div class="sub" id="uploadHint">Use the <b>my_spotify_data.zip</b> file that Spotify emails you. There's no need to unzip it.</div>
     <div class="drop" id="drop">
-      <div class="big">Drop your zip file here</div>
-      <div class="sub">or</div>
-      <button class="btn primary" id="chooseBtn" type="button">Choose file</button>
-      <div class="privacy">Your file is processed in this browser. Nothing is uploaded to a server.</div>
+      <div class="big" data-i18n="drop">Drop your zip file here</div>
+      <div class="sub" data-i18n="or">or</div>
+      <button class="btn primary" id="chooseBtn" type="button" data-i18n="choose">Choose file</button>
+      <div class="privacy" data-i18n="privacy">Your file is processed in this browser. Nothing is uploaded to a server.</div>
     </div>
     <div class="status" id="status" role="status"></div>
-    <div class="sub" style="margin-top:8px">Don't have the file yet? <button class="linklike" id="howLink" type="button">See how to request it from Spotify</button></div>
+    <div class="sub" style="margin-top:8px"><span data-i18n="noFile">Don't have the file yet?</span> <button class="linklike" id="howLink" type="button">See how to request it from Spotify</button></div>
   </section>
 
   <!-- Dashboard -->
@@ -235,7 +236,7 @@
       <div class="table-wrap scroll" style="margin-top:12px">
         <table>
           <thead>
-            <tr><th>#</th><th id="chHead">Channel</th><th class="num">Plays</th><th class="num col-vids">Videos</th><th>First watched</th></tr>
+            <tr><th>#</th><th id="chHead">Channel</th><th class="num" data-i18n="plays">Plays</th><th class="num col-vids" id="chCount">Videos</th><th id="chFirst">First watched</th></tr>
           </thead>
           <tbody id="chRows"></tbody>
         </table>
@@ -245,8 +246,8 @@
     <section class="card">
       <h2 id="tableTitle">Top 500 most-streamed songs</h2>
       <div class="controls">
-        <input type="search" id="q" placeholder="Search song, artist or album…" aria-label="Search">
-        <div class="seg" role="group" aria-label="Count mode" id="modeSeg">
+        <input type="search" id="q" placeholder="Search song, artist or album…" aria-label="Search" data-i18n-aria="search">
+        <div class="seg" role="group" aria-label="Count mode" data-i18n-aria="countMode" id="modeSeg">
           <button type="button" data-mode="streams" aria-pressed="true">Streams ≥ 30s</button>
           <button type="button" data-mode="plays" aria-pressed="false">All plays</button>
         </div>
@@ -259,8 +260,8 @@
               <th data-key="rank">#</th>
               <th data-key="name" id="nameHead">Song</th>
               <th data-key="artist" id="artistHead">Artist</th>
-              <th data-key="amount" class="num" aria-sort="descending">Amount</th>
-              <th data-key="mins" class="num col-mins">Minutes</th>
+              <th data-key="amount" class="num" aria-sort="descending" data-i18n="amount">Amount</th>
+              <th data-key="mins" class="num col-mins" data-i18n="minutes">Minutes</th>
               <th data-key="first">First streamed</th>
             </tr>
           </thead>
@@ -275,36 +276,113 @@
 
 <dialog id="shareDlg" aria-labelledby="shareTitle">
   <div class="dlg-body">
-    <h2 id="shareTitle">Share to Instagram Stories</h2>
-    <img id="storyImg" class="story-preview" alt="Story image with your top results">
+    <h2 id="shareTitle" data-i18n="shareTitle">Share to Instagram Stories</h2>
+    <img id="storyImg" class="story-preview" alt="Story image with your top results" data-i18n-alt="storyAlt">
     <div class="dlg-note" id="shareNote"></div>
   </div>
   <div class="dlg-actions">
-    <button class="btn" type="button" id="shareClose">Close</button>
-    <button class="btn" type="button" id="storyDownload">Download image</button>
-    <button class="btn primary" type="button" id="storyShare" hidden>Share…</button>
+    <button class="btn" type="button" id="shareClose" data-i18n="close">Close</button>
+    <button class="btn" type="button" id="storyDownload" data-i18n="download">Download image</button>
+    <button class="btn primary" type="button" id="storyShare" hidden data-i18n="shareAction">Share…</button>
   </div>
 </dialog>
 
 <dialog id="howDlg" aria-labelledby="howTitle">
   <div class="dlg-body">
-    <h2 id="howTitle">How to get your data</h2>
+    <h2 id="howTitle" data-i18n="howBtn">How to get your data</h2>
     <div class="seg" role="group" aria-label="Service" id="howSeg">
       <button type="button" data-how="spotify" aria-pressed="true">Spotify</button>
       <button type="button" data-how="youtube" aria-pressed="false">YouTube</button>
     </div>
-    <div data-how-panel="spotify">
-      <ol>
+    <div data-how-panel="spotify" data-i18n-html="howSpotify"></div>
+    <div data-how-panel="youtube" data-i18n-html="howYouTube" hidden></div>
+  </div>
+  <div class="dlg-actions">
+    <a class="btn" id="howSite" href="https://www.spotify.com/account/privacy/" target="_blank" rel="noopener" style="text-decoration:none">Open Spotify privacy page</a>
+    <button class="btn primary" type="button" id="howClose" data-i18n="gotIt">Got it</button>
+  </div>
+</dialog>
+
+<script>
+let DATA = /*__DATA__*/null;
+const fmt = n => n.toLocaleString(I18N[LANG]._numLocale);
+const fmtDate = ts => ts ? new Date(ts).toLocaleDateString(I18N[LANG]._locale, { day: "2-digit", month: "short", year: "numeric" }) : "—";
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const $ = id => document.getElementById(id);
+
+// ---------------------------------------------------------------------------
+// Languages: English, Portuguese (Brazil) and Spanish (Spain). t("key", {var}) fills in {var}.
+// ---------------------------------------------------------------------------
+const I18N = {
+  en: {
+    _locale: "en-GB", _numLocale: "en-US",
+    tagline: "Your Spotify and YouTube history, visualised",
+    language: "Language", howBtn: "How to get your data", year: "Year", allYears: "All years",
+    shareBtn: "Share to Stories", uploadAnother: "Upload another file", theme: "Toggle theme",
+    sourceAria: "Choose your data source", uploadTitle: "Upload your {name} data",
+    hintSpotify: "Use the <b>my_spotify_data.zip</b> file that Spotify emails you. There's no need to unzip it.",
+    hintYouTube: "Use the <b>takeout-….zip</b> file from Google Takeout with your YouTube history in JSON format. There's no need to unzip it.",
+    drop: "Drop your zip file here", or: "or", choose: "Choose file",
+    privacy: "Your file is processed in this browser. Nothing is uploaded to a server.",
+    noFile: "Don't have the file yet?", howLink: "See how to request it from {name}",
+    search: "Search", searchSongs: "Search song, artist or album…", searchVideos: "Search video or channel…",
+    countMode: "Count mode", amount: "Amount", minutes: "Minutes", plays: "Plays", videos: "Videos", songs: "Songs",
+    song: "Song", artist: "Artist", video: "Video", channel: "Channel",
+    firstStreamed: "First streamed", firstPlayed: "First played", firstWatched: "First watched",
+    topArtists: "Top artists", topChannels: "Top channels",
+    modeStreams: "Streams ≥ 30s", modePlays: "All plays", modeAll: "All videos", modeMusic: "Music only",
+    noMusic: "No YouTube Music plays in this export",
+    footerSpotify: "Songs are grouped by artist + title, so the same track released on several albums counts once. Podcasts, audiobooks and videos are excluded.",
+    footerYT: "YouTube doesn't record how long you watched, so every video you opened counts as one play.",
+    footerYTExcluded: "Community posts, ads and {n} removed or private videos are excluded.",
+    footerYTExcluded0: "Community posts and removed videos are excluded.",
+    footerYTMusic: "In Music only, songs are grouped by artist + title and “ - Topic” is removed from channel names.",
+    histSpotify: "Spotify listening history", histYT: "YouTube watch history", histYTMusic: "YouTube Music history",
+    showing: "showing {y}", inYear: "in {y}",
+    tVideosWatched: "Videos watched", tEveryPlay: "every play counts", tUniqueVideos: "Unique videos", tChannels: "Channels",
+    tTopChannel: "Top channel", tMostWatched: "Most watched", tSongsPlayed: "Songs played", tUniqueSongs: "Unique songs",
+    tArtists: "Artists", tTopArtist: "Top artist", tMostPlayed: "Most played", tTotalStreams: "Total streams",
+    tPlays30: "plays ≥ 30 seconds", tHours: "Hours listened", tDays: "≈ {n} days", tStreamedOnce: "streamed at least once",
+    tUniqueArtists: "Unique artists", tMostStreamed: "Most streamed",
+    top500Streamed: "Top 500 most-streamed songs", top500Played: "Top 500 most-played songs", top500Watched: "Top 500 most-watched videos",
+    streamsYear: "Streams per year", streamsMonth: "Streams per month", videosYear: "Videos per year", videosMonth: "Videos per month",
+    playsYear: "Plays per year", playsMonth: "Plays per month",
+    subSpotify: "Plays of 30 seconds or more", subYT: "Every play counts",
+    onlyYear: "your history covers only {y}", clickBar: "click a bar to filter by that year",
+    uStreams: "streams", uVideos: "videos", uPlays: "plays", uHours: "hours",
+    chSubChannels: "{n} channels by number of plays", chSubArtists: "{n} artists by number of plays",
+    countOf: "{a} of {b}", countSongs: "{n} songs", countVideos: "{n} videos",
+    // upload messages
+    oldBrowser: "Your browser is too old to read zip files. Please use a recent version of Chrome, Edge, Firefox or Safari.",
+    opening: "Opening {file}…", reading: "Reading {file} ({i} of {n})…", building: "Building your dashboard…",
+    wrongSource: "This looks like a {name} export. Choose {name} above and upload it again.",
+    htmlExport: "This YouTube export is in HTML format. Export it again from Google Takeout and, under Multiple formats, change history to JSON.",
+    notFoundSpotify: "No Spotify streaming history found. The zip should contain files named Streaming_History_Audio_….json (or StreamingHistory_music_….json).",
+    noDataSpotify: "The files were read, but they contain no music plays of 30 seconds or more.",
+    notFoundYouTube: "No YouTube watch history found. Export it from Google Takeout with YouTube and YouTube Music → history selected.",
+    noDataYouTube: "The files were read, but they contain no watched videos. Make sure the export includes your YouTube watch history.",
+    zipInvalid: "This doesn't look like a valid zip file.", zipDamaged: "The zip file is damaged.",
+    zipUnsupported: "Unsupported compression in {file}.", genericError: "Something went wrong while reading the file.",
+    // share
+    shareTitle: "Share to Instagram Stories", storyAlt: "Story image with your top results", close: "Close",
+    download: "Download image", shareAction: "Share…",
+    shareNoteYes: "Tap Share… and choose Instagram, then Stories. If Instagram isn't listed, download the image and add it from your camera roll.",
+    shareNoteNo: "Download the image, send it to your phone, and add it to your story from Instagram. On a phone, this button opens the share sheet instead.",
+    sMySpotify: "My Spotify", sMyYT: "My YouTube", sMyYTMusic: "My YouTube Music",
+    sStreams: "streams", sHours: "hours", sSongs: "songs", sPlays: "plays", sArtists: "artists",
+    sVideosWatched: "videos watched", sUniqueVideos: "unique videos", sChannels: "channels",
+    sTopSongs: "Top songs", sTopVideos: "Top videos", sTopArtists: "Top artists", sTopChannels: "Top channels", sSeeYours: "See yours at",
+    // instructions
+    gotIt: "Got it", openSpotify: "Open Spotify privacy page", openTakeout: "Open Google Takeout",
+    howSpotify: `<ol>
         <li>Open your <a href="https://www.spotify.com/account/privacy/" target="_blank" rel="noopener">Spotify account privacy page</a> and log in.</li>
         <li>Scroll to <b>Download your data</b> and tick <b>Extended streaming history</b>. This covers your whole listening history. <b>Account data</b> only includes the last year, but it works here too.</li>
         <li>Click <b>Request data</b>, then open the email from Spotify and click its link to confirm the request.</li>
         <li>Wait for a second email saying your data is ready. Spotify says this can take <b>up to 30 days</b>, but it often arrives sooner.</li>
         <li>Download <b>my_spotify_data.zip</b> from that email and upload it here. You don't need to unzip it.</li>
       </ol>
-      <div class="dlg-note">The download link in Spotify's email expires after a while, so download the file soon after it arrives. The file is read only in your browser and is never uploaded.</div>
-    </div>
-    <div data-how-panel="youtube" hidden>
-      <ol>
+      <div class="dlg-note">The download link in Spotify's email expires after a while, so download the file soon after it arrives. The file is read only in your browser and is never uploaded.</div>`,
+    howYouTube: `<ol>
         <li>Open <a href="https://takeout.google.com/" target="_blank" rel="noopener">Google Takeout</a> and log in.</li>
         <li>Click <b>Deselect all</b>, then scroll down and tick <b>YouTube and YouTube Music</b>.</li>
         <li>Click <b>All YouTube data included</b>, click <b>Deselect all</b>, tick only <b>history</b> and click <b>OK</b>.</li>
@@ -312,21 +390,166 @@
         <li>Click <b>Next step</b>, keep <b>.zip</b> and <b>Export once</b>, and click <b>Create export</b>. The email usually arrives within minutes.</li>
         <li>Download <b>takeout-….zip</b> from the email and upload it here. You don't need to unzip it.</li>
       </ol>
-      <div class="dlg-note">YouTube doesn't record how long you watched, so every video you opened counts as one play. The export only includes history Google still keeps: if auto-delete is on in your YouTube history settings, older history is gone. The file is read only in your browser and is never uploaded.</div>
-    </div>
-  </div>
-  <div class="dlg-actions">
-    <a class="btn" id="howSite" href="https://www.spotify.com/account/privacy/" target="_blank" rel="noopener" style="text-decoration:none">Open Spotify privacy page</a>
-    <button class="btn primary" type="button" id="howClose">Got it</button>
-  </div>
-</dialog>
-
-<script>
-let DATA = /*__DATA__*/null;
-const fmt = n => n.toLocaleString("en-US");
-const fmtDate = ts => ts ? new Date(ts).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" }) : "—";
-const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
-const $ = id => document.getElementById(id);
+      <div class="dlg-note">YouTube doesn't record how long you watched, so every video you opened counts as one play. The export only includes history Google still keeps: if auto-delete is on in your YouTube history settings, older history is gone. The file is read only in your browser and is never uploaded.</div>`,
+  },
+  pt: {
+    _locale: "pt-BR", _numLocale: "pt-BR",
+    tagline: "Seu histórico do Spotify e do YouTube em gráficos",
+    language: "Idioma", howBtn: "Como obter seus dados", year: "Ano", allYears: "Todos os anos",
+    shareBtn: "Compartilhar nos Stories", uploadAnother: "Enviar outro arquivo", theme: "Mudar tema",
+    sourceAria: "Escolha a origem dos dados", uploadTitle: "Envie seus dados do {name}",
+    hintSpotify: "Use o arquivo <b>my_spotify_data.zip</b> que o Spotify envia por e-mail. Não precisa descompactar.",
+    hintYouTube: "Use o arquivo <b>takeout-….zip</b> do Google Takeout com seu histórico do YouTube em formato JSON. Não precisa descompactar.",
+    drop: "Arraste seu arquivo zip para cá", or: "ou", choose: "Escolher arquivo",
+    privacy: "Seu arquivo é processado neste navegador. Nada é enviado para um servidor.",
+    noFile: "Ainda não tem o arquivo?", howLink: "Veja como pedir ao {name}",
+    search: "Buscar", searchSongs: "Buscar música, artista ou álbum…", searchVideos: "Buscar vídeo ou canal…",
+    countMode: "Forma de contagem", amount: "Total", minutes: "Minutos", plays: "Reproduções", videos: "Vídeos", songs: "Músicas",
+    song: "Música", artist: "Artista", video: "Vídeo", channel: "Canal",
+    firstStreamed: "Primeiro stream", firstPlayed: "Primeira vez", firstWatched: "Visto pela 1ª vez",
+    topArtists: "Top artistas", topChannels: "Top canais",
+    modeStreams: "Streams ≥ 30s", modePlays: "Todas as reproduções", modeAll: "Todos os vídeos", modeMusic: "Só música",
+    noMusic: "Nenhuma reprodução do YouTube Music nesta exportação",
+    footerSpotify: "As músicas são agrupadas por artista + título, então a mesma faixa lançada em vários álbuns conta uma vez só. Podcasts, audiolivros e vídeos ficam de fora.",
+    footerYT: "O YouTube não registra quanto tempo você assistiu, então cada vídeo aberto conta como uma reprodução.",
+    footerYTExcluded: "Posts da comunidade, anúncios e {n} vídeos removidos ou privados ficam de fora.",
+    footerYTExcluded0: "Posts da comunidade e vídeos removidos ficam de fora.",
+    footerYTMusic: "Em Só música, as músicas são agrupadas por artista + título e o “ - Topic” é removido do nome dos canais.",
+    histSpotify: "Histórico do Spotify", histYT: "Histórico do YouTube", histYTMusic: "Histórico do YouTube Music",
+    showing: "mostrando {y}", inYear: "em {y}",
+    tVideosWatched: "Vídeos assistidos", tEveryPlay: "toda reprodução conta", tUniqueVideos: "Vídeos diferentes", tChannels: "Canais",
+    tTopChannel: "Canal favorito", tMostWatched: "Mais assistido", tSongsPlayed: "Músicas tocadas", tUniqueSongs: "Músicas diferentes",
+    tArtists: "Artistas", tTopArtist: "Artista favorito", tMostPlayed: "Mais tocada", tTotalStreams: "Total de streams",
+    tPlays30: "reproduções ≥ 30 segundos", tHours: "Horas ouvidas", tDays: "≈ {n} dias", tStreamedOnce: "ouvidas pelo menos uma vez",
+    tUniqueArtists: "Artistas diferentes", tMostStreamed: "Mais ouvida",
+    top500Streamed: "Top 500 músicas mais ouvidas", top500Played: "Top 500 músicas mais tocadas", top500Watched: "Top 500 vídeos mais assistidos",
+    streamsYear: "Streams por ano", streamsMonth: "Streams por mês", videosYear: "Vídeos por ano", videosMonth: "Vídeos por mês",
+    playsYear: "Reproduções por ano", playsMonth: "Reproduções por mês",
+    subSpotify: "Reproduções de 30 segundos ou mais", subYT: "Toda reprodução conta",
+    onlyYear: "seu histórico só cobre {y}", clickBar: "clique numa barra para filtrar pelo ano",
+    uStreams: "streams", uVideos: "vídeos", uPlays: "reproduções", uHours: "horas",
+    chSubChannels: "{n} canais por número de reproduções", chSubArtists: "{n} artistas por número de reproduções",
+    countOf: "{a} de {b}", countSongs: "{n} músicas", countVideos: "{n} vídeos",
+    oldBrowser: "Seu navegador é antigo demais para ler arquivos zip. Use uma versão recente do Chrome, Edge, Firefox ou Safari.",
+    opening: "Abrindo {file}…", reading: "Lendo {file} ({i} de {n})…", building: "Montando seu painel…",
+    wrongSource: "Isto parece uma exportação do {name}. Escolha {name} acima e envie de novo.",
+    htmlExport: "Esta exportação do YouTube está em HTML. Exporte de novo no Google Takeout e, em Vários formatos, mude o histórico para JSON.",
+    notFoundSpotify: "Nenhum histórico do Spotify encontrado. O zip deve ter arquivos chamados Streaming_History_Audio_….json (ou StreamingHistory_music_….json).",
+    noDataSpotify: "Os arquivos foram lidos, mas não têm nenhuma reprodução de música de 30 segundos ou mais.",
+    notFoundYouTube: "Nenhum histórico do YouTube encontrado. Exporte pelo Google Takeout com YouTube e YouTube Music → histórico selecionado.",
+    noDataYouTube: "Os arquivos foram lidos, mas não têm nenhum vídeo assistido. Confira se a exportação inclui seu histórico de exibição do YouTube.",
+    zipInvalid: "Este não parece ser um arquivo zip válido.", zipDamaged: "O arquivo zip está corrompido.",
+    zipUnsupported: "Compressão não suportada em {file}.", genericError: "Algo deu errado ao ler o arquivo.",
+    shareTitle: "Compartilhar nos Stories do Instagram", storyAlt: "Imagem para Stories com seus resultados", close: "Fechar",
+    download: "Baixar imagem", shareAction: "Compartilhar…",
+    shareNoteYes: "Toque em Compartilhar… e escolha Instagram e depois Stories. Se o Instagram não aparecer, baixe a imagem e adicione pela galeria.",
+    shareNoteNo: "Baixe a imagem, mande para o celular e adicione aos seus Stories pelo Instagram. No celular, este botão abre o menu de compartilhar.",
+    sMySpotify: "Meu Spotify", sMyYT: "Meu YouTube", sMyYTMusic: "Meu YouTube Music",
+    sStreams: "streams", sHours: "horas", sSongs: "músicas", sPlays: "reproduções", sArtists: "artistas",
+    sVideosWatched: "vídeos vistos", sUniqueVideos: "vídeos diferentes", sChannels: "canais",
+    sTopSongs: "Top músicas", sTopVideos: "Top vídeos", sTopArtists: "Top artistas", sTopChannels: "Top canais", sSeeYours: "Veja o seu em",
+    gotIt: "Entendi", openSpotify: "Abrir privacidade do Spotify", openTakeout: "Abrir o Google Takeout",
+    howSpotify: `<ol>
+        <li>Abra a <a href="https://www.spotify.com/account/privacy/" target="_blank" rel="noopener">página de privacidade da sua conta do Spotify</a> e faça login.</li>
+        <li>Desça até <b>Baixar seus dados</b> e marque <b>Histórico de streaming estendido</b>. Ele cobre todo o seu histórico. Os <b>Dados da conta</b> só incluem o último ano, mas também funcionam aqui.</li>
+        <li>Clique em <b>Solicitar dados</b>, abra o e-mail do Spotify e clique no link para confirmar o pedido.</li>
+        <li>Espere um segundo e-mail avisando que seus dados estão prontos. O Spotify diz que pode levar <b>até 30 dias</b>, mas costuma chegar antes.</li>
+        <li>Baixe o <b>my_spotify_data.zip</b> desse e-mail e envie aqui. Não precisa descompactar.</li>
+      </ol>
+      <div class="dlg-note">O link de download do e-mail do Spotify expira depois de um tempo, então baixe o arquivo logo que ele chegar. O arquivo só é lido no seu navegador e nunca é enviado.</div>`,
+    howYouTube: `<ol>
+        <li>Abra o <a href="https://takeout.google.com/" target="_blank" rel="noopener">Google Takeout</a> e faça login.</li>
+        <li>Clique em <b>Desmarcar tudo</b>, desça e marque <b>YouTube e YouTube Music</b>.</li>
+        <li>Clique em <b>Todos os dados do YouTube incluídos</b>, depois em <b>Desmarcar tudo</b>, marque só <b>histórico</b> e clique em <b>OK</b>.</li>
+        <li>Clique em <b>Vários formatos</b> e mude <b>histórico</b> de <b>HTML</b> para <b>JSON</b>. Este passo é obrigatório.</li>
+        <li>Clique em <b>Próxima etapa</b>, mantenha <b>.zip</b> e <b>Exportar uma vez</b> e clique em <b>Criar exportação</b>. O e-mail costuma chegar em poucos minutos.</li>
+        <li>Baixe o <b>takeout-….zip</b> do e-mail e envie aqui. Não precisa descompactar.</li>
+      </ol>
+      <div class="dlg-note">O YouTube não registra quanto tempo você assistiu, então cada vídeo aberto conta como uma reprodução. A exportação só inclui o histórico que o Google ainda guarda: se a exclusão automática estiver ativada nas configurações do histórico do YouTube, o histórico antigo já foi apagado. O arquivo só é lido no seu navegador e nunca é enviado.</div>`,
+  },
+  es: {
+    _locale: "es-ES", _numLocale: "es-ES",
+    tagline: "Tu historial de Spotify y YouTube, en gráficos",
+    language: "Idioma", howBtn: "Cómo conseguir tus datos", year: "Año", allYears: "Todos los años",
+    shareBtn: "Compartir en historias", uploadAnother: "Subir otro archivo", theme: "Cambiar tema",
+    sourceAria: "Elige el origen de los datos", uploadTitle: "Sube tus datos de {name}",
+    hintSpotify: "Usa el archivo <b>my_spotify_data.zip</b> que Spotify te envía por correo. No hace falta descomprimirlo.",
+    hintYouTube: "Usa el archivo <b>takeout-….zip</b> de Google Takeout con tu historial de YouTube en formato JSON. No hace falta descomprimirlo.",
+    drop: "Arrastra aquí tu archivo zip", or: "o", choose: "Elegir archivo",
+    privacy: "Tu archivo se procesa en este navegador. No se sube nada a ningún servidor.",
+    noFile: "¿Aún no tienes el archivo?", howLink: "Mira cómo pedírselo a {name}",
+    search: "Buscar", searchSongs: "Buscar canción, artista o álbum…", searchVideos: "Buscar vídeo o canal…",
+    countMode: "Forma de contar", amount: "Total", minutes: "Minutos", plays: "Reproducciones", videos: "Vídeos", songs: "Canciones",
+    song: "Canción", artist: "Artista", video: "Vídeo", channel: "Canal",
+    firstStreamed: "Primera escucha", firstPlayed: "Primera vez", firstWatched: "Visto por 1.ª vez",
+    topArtists: "Artistas más escuchados", topChannels: "Canales más vistos",
+    modeStreams: "Escuchas ≥ 30 s", modePlays: "Todas las reproducciones", modeAll: "Todos los vídeos", modeMusic: "Solo música",
+    noMusic: "No hay reproducciones de YouTube Music en esta exportación",
+    footerSpotify: "Las canciones se agrupan por artista + título, así que la misma pista publicada en varios álbumes cuenta una sola vez. Se excluyen pódcasts, audiolibros y vídeos.",
+    footerYT: "YouTube no registra cuánto tiempo viste cada vídeo, así que cada vídeo que abriste cuenta como una reproducción.",
+    footerYTExcluded: "Se excluyen las publicaciones de la comunidad, los anuncios y {n} vídeos eliminados o privados.",
+    footerYTExcluded0: "Se excluyen las publicaciones de la comunidad y los vídeos eliminados.",
+    footerYTMusic: "En Solo música, las canciones se agrupan por artista + título y se quita “ - Topic” del nombre de los canales.",
+    histSpotify: "Historial de Spotify", histYT: "Historial de YouTube", histYTMusic: "Historial de YouTube Music",
+    showing: "mostrando {y}", inYear: "en {y}",
+    tVideosWatched: "Vídeos vistos", tEveryPlay: "cuenta cada reproducción", tUniqueVideos: "Vídeos distintos", tChannels: "Canales",
+    tTopChannel: "Canal favorito", tMostWatched: "Más visto", tSongsPlayed: "Canciones reproducidas", tUniqueSongs: "Canciones distintas",
+    tArtists: "Artistas", tTopArtist: "Artista favorito", tMostPlayed: "Más reproducida", tTotalStreams: "Escuchas totales",
+    tPlays30: "reproducciones ≥ 30 segundos", tHours: "Horas escuchadas", tDays: "≈ {n} días", tStreamedOnce: "escuchadas al menos una vez",
+    tUniqueArtists: "Artistas distintos", tMostStreamed: "Más escuchada",
+    top500Streamed: "Las 500 canciones más escuchadas", top500Played: "Las 500 canciones más reproducidas", top500Watched: "Los 500 vídeos más vistos",
+    streamsYear: "Escuchas por año", streamsMonth: "Escuchas por mes", videosYear: "Vídeos por año", videosMonth: "Vídeos por mes",
+    playsYear: "Reproducciones por año", playsMonth: "Reproducciones por mes",
+    subSpotify: "Reproducciones de 30 segundos o más", subYT: "Cuenta cada reproducción",
+    onlyYear: "tu historial solo cubre {y}", clickBar: "haz clic en una barra para filtrar por ese año",
+    uStreams: "escuchas", uVideos: "vídeos", uPlays: "reproducciones", uHours: "horas",
+    chSubChannels: "{n} canales por número de reproducciones", chSubArtists: "{n} artistas por número de reproducciones",
+    countOf: "{a} de {b}", countSongs: "{n} canciones", countVideos: "{n} vídeos",
+    oldBrowser: "Tu navegador es demasiado antiguo para leer archivos zip. Usa una versión reciente de Chrome, Edge, Firefox o Safari.",
+    opening: "Abriendo {file}…", reading: "Leyendo {file} ({i} de {n})…", building: "Creando tu panel…",
+    wrongSource: "Parece una exportación de {name}. Elige {name} arriba y vuelve a subirla.",
+    htmlExport: "Esta exportación de YouTube está en HTML. Vuelve a exportarla desde Google Takeout y, en Varios formatos, cambia el historial a JSON.",
+    notFoundSpotify: "No se ha encontrado historial de Spotify. El zip debería contener archivos llamados Streaming_History_Audio_….json (o StreamingHistory_music_….json).",
+    noDataSpotify: "Se han leído los archivos, pero no contienen ninguna reproducción de música de 30 segundos o más.",
+    notFoundYouTube: "No se ha encontrado historial de YouTube. Expórtalo desde Google Takeout con YouTube y YouTube Music → historial seleccionado.",
+    noDataYouTube: "Se han leído los archivos, pero no contienen ningún vídeo visto. Comprueba que la exportación incluya tu historial de reproducciones de YouTube.",
+    zipInvalid: "No parece un archivo zip válido.", zipDamaged: "El archivo zip está dañado.",
+    zipUnsupported: "Compresión no compatible en {file}.", genericError: "Algo ha fallado al leer el archivo.",
+    shareTitle: "Compartir en historias de Instagram", storyAlt: "Imagen para historias con tus resultados", close: "Cerrar",
+    download: "Descargar imagen", shareAction: "Compartir…",
+    shareNoteYes: "Pulsa Compartir… y elige Instagram y después Historias. Si Instagram no aparece, descarga la imagen y añádela desde tu galería.",
+    shareNoteNo: "Descarga la imagen, pásala a tu móvil y añádela a tu historia desde Instagram. En el móvil, este botón abre el menú de compartir.",
+    sMySpotify: "Mi Spotify", sMyYT: "Mi YouTube", sMyYTMusic: "Mi YouTube Music",
+    sStreams: "escuchas", sHours: "horas", sSongs: "canciones", sPlays: "reproducciones", sArtists: "artistas",
+    sVideosWatched: "vídeos vistos", sUniqueVideos: "vídeos distintos", sChannels: "canales",
+    sTopSongs: "Top canciones", sTopVideos: "Top vídeos", sTopArtists: "Top artistas", sTopChannels: "Top canales", sSeeYours: "Mira el tuyo en",
+    gotIt: "Entendido", openSpotify: "Abrir privacidad de Spotify", openTakeout: "Abrir Google Takeout",
+    howSpotify: `<ol>
+        <li>Abre la <a href="https://www.spotify.com/account/privacy/" target="_blank" rel="noopener">página de privacidad de tu cuenta de Spotify</a> e inicia sesión.</li>
+        <li>Baja hasta <b>Descargar tus datos</b> y marca <b>Historial de streaming ampliado</b>. Incluye todo tu historial de escucha. Los <b>Datos de la cuenta</b> solo incluyen el último año, pero también sirven.</li>
+        <li>Haz clic en <b>Solicitar datos</b>, abre el correo de Spotify y pulsa el enlace para confirmar la solicitud.</li>
+        <li>Espera un segundo correo que diga que tus datos están listos. Spotify dice que puede tardar <b>hasta 30 días</b>, pero suele llegar antes.</li>
+        <li>Descarga <b>my_spotify_data.zip</b> desde ese correo y súbelo aquí. No hace falta descomprimirlo.</li>
+      </ol>
+      <div class="dlg-note">El enlace de descarga del correo de Spotify caduca al cabo de un tiempo, así que descarga el archivo en cuanto llegue. El archivo solo se lee en tu navegador y nunca se sube.</div>`,
+    howYouTube: `<ol>
+        <li>Abre <a href="https://takeout.google.com/" target="_blank" rel="noopener">Google Takeout</a> e inicia sesión.</li>
+        <li>Haz clic en <b>Anular selección</b>, baja y marca <b>YouTube y YouTube Music</b>.</li>
+        <li>Haz clic en <b>Se incluyen todos los datos de YouTube</b>, luego en <b>Anular selección</b>, marca solo <b>historial</b> y haz clic en <b>Aceptar</b>.</li>
+        <li>Haz clic en <b>Varios formatos</b> y cambia <b>historial</b> de <b>HTML</b> a <b>JSON</b>. Este paso es obligatorio.</li>
+        <li>Haz clic en <b>Siguiente paso</b>, deja <b>.zip</b> y <b>Exportar una vez</b> y haz clic en <b>Crear exportación</b>. El correo suele llegar en pocos minutos.</li>
+        <li>Descarga <b>takeout-….zip</b> desde el correo y súbelo aquí. No hace falta descomprimirlo.</li>
+      </ol>
+      <div class="dlg-note">YouTube no registra cuánto tiempo viste cada vídeo, así que cada vídeo que abriste cuenta como una reproducción. La exportación solo incluye el historial que Google aún guarda: si tienes activado el borrado automático en la configuración del historial de YouTube, el historial antiguo ya no está. El archivo solo se lee en tu navegador y nunca se sube.</div>`,
+  },
+};
+const LANGS = [["en", "English"], ["pt", "Português"], ["es", "Español"]];
+let LANG = "en";
+try {
+  const saved = localStorage.getItem("ds-lang");
+  LANG = I18N[saved] ? saved : ((navigator.languages || [navigator.language]).map(l => String(l).slice(0, 2).toLowerCase()).find(l => I18N[l]) || "en");
+} catch (e) {}
+const t = (key, vars = {}) => String(I18N[LANG][key] ?? I18N.en[key] ?? key).replace(/\{(\w+)\}/g, (_, k) => vars[k] ?? "");
 
 // ---------------------------------------------------------------------------
 // Aggregation - mirrors build.py so uploaded files produce the same dashboard
@@ -582,12 +805,12 @@ async function readZip(buf) {
   for (let i = buf.byteLength - 22; i >= Math.max(0, buf.byteLength - 65557); i--) {
     if (dv.getUint32(i, true) === 0x06054b50) { eocd = i; break; }
   }
-  if (eocd < 0) throw new Error("This doesn't look like a valid zip file.");
+  if (eocd < 0) throw Object.assign(new Error("This doesn't look like a valid zip file."), { i18n: "zipInvalid" });
   const count = dv.getUint16(eocd + 10, true);
   let p = dv.getUint32(eocd + 16, true);
   const entries = [];
   for (let n = 0; n < count; n++) {
-    if (dv.getUint32(p, true) !== 0x02014b50) throw new Error("The zip file is damaged.");
+    if (dv.getUint32(p, true) !== 0x02014b50) throw Object.assign(new Error("The zip file is damaged."), { i18n: "zipDamaged" });
     const method = dv.getUint16(p + 10, true), size = dv.getUint32(p + 20, true);
     const nameLen = dv.getUint16(p + 28, true), extraLen = dv.getUint16(p + 30, true), commentLen = dv.getUint16(p + 32, true);
     const local = dv.getUint32(p + 42, true);
@@ -598,7 +821,7 @@ async function readZip(buf) {
         const start = local + 30 + dv.getUint16(local + 26, true) + dv.getUint16(local + 28, true);
         const bytes = new Uint8Array(buf, start, size);
         if (method === 0) return JSON.parse(dec.decode(bytes));
-        if (method !== 8) throw new Error(`Unsupported compression in ${name}.`);
+        if (method !== 8) throw Object.assign(new Error(`Unsupported compression in ${name}.`), { i18n: "zipUnsupported", vars: { file: name } });
         const stream = new Blob([bytes]).stream().pipeThrough(new DecompressionStream("deflate-raw"));
         return JSON.parse(await new Response(stream).text());
       },
@@ -622,27 +845,34 @@ function pickHistoryFiles(entries) {
 // Upload
 // ---------------------------------------------------------------------------
 const statusEl = $("status");
-const setStatus = (msg, error) => { statusEl.textContent = msg; statusEl.classList.toggle("error", !!error); };
+let statusState = null; // {key, vars, error}; key "raw" shows vars.msg as is
+const setStatus = (key, vars, error) => { statusState = key ? { key, vars, error } : null; renderStatus(); };
+function renderStatus() {
+  const st = statusState;
+  statusEl.textContent = !st ? "" : st.key === "raw" ? st.vars.msg : t(st.key, st.vars);
+  statusEl.classList.toggle("error", !!st?.error);
+}
+const fail = (key, vars) => Object.assign(new Error(t(key, vars)), { i18n: key, vars });
 
 // Each source has its own pipeline: which files to read, how to aggregate them, and its own messages.
 const SOURCES = {
   spotify: {
     name: "Spotify",
-    hint: "Use the <b>my_spotify_data.zip</b> file that Spotify emails you. There's no need to unzip it.",
+    hint: "hintSpotify",
     pick: pickHistoryFiles,
     aggregate,
     empty: r => !r.views.all.summary.streams,
-    notFound: "No Spotify streaming history found. The zip should contain files named Streaming_History_Audio_….json (or StreamingHistory_music_….json).",
-    noData: "The files were read, but they contain no music plays of 30 seconds or more.",
+    notFound: "notFoundSpotify",
+    noData: "noDataSpotify",
   },
   youtube: {
     name: "YouTube",
-    hint: "Use the <b>takeout-….zip</b> file from Google Takeout with your YouTube history in JSON format. There's no need to unzip it.",
+    hint: "hintYouTube",
     pick: pickYouTubeFiles,
     aggregate: aggregateYouTube,
     empty: r => !r.variants.all.views.all.summary.streams,
-    notFound: "No YouTube watch history found. Export it from Google Takeout with YouTube and YouTube Music → history selected.",
-    noData: "The files were read, but they contain no watched videos. Make sure the export includes your YouTube watch history.",
+    notFound: "notFoundYouTube",
+    noData: "noDataYouTube",
   },
 };
 let source = "spotify";
@@ -652,10 +882,10 @@ function setSource(s) {
   source = s;
   try { localStorage.setItem("ds-source", s); } catch (e) {}
   document.querySelectorAll("#sourceSeg button").forEach(b => b.setAttribute("aria-pressed", b.dataset.source === s));
-  $("uploadTitle").textContent = `Upload your ${SOURCES[s].name} data`;
-  $("uploadHint").innerHTML = SOURCES[s].hint;
-  $("howLink").textContent = `See how to request it from ${SOURCES[s].name}`;
-  setStatus("");
+  $("uploadTitle").textContent = t("uploadTitle", { name: SOURCES[s].name });
+  $("uploadHint").innerHTML = t(SOURCES[s].hint);
+  $("howLink").textContent = t("howLink", { name: SOURCES[s].name });
+  setStatus(null);
 }
 document.querySelectorAll("#sourceSeg button").forEach(b => b.addEventListener("click", () => setSource(b.dataset.source)));
 
@@ -665,11 +895,11 @@ async function loadFiles(fileList) {
   showUpload();
   const src = SOURCES[source];
   try {
-    if (typeof DecompressionStream === "undefined") throw new Error("Your browser is too old to read zip files. Please use a recent version of Chrome, Edge, Firefox or Safari.");
+    if (typeof DecompressionStream === "undefined") throw fail("oldBrowser");
     let entries = [];
     for (const f of files) {
       if (/\.zip$/i.test(f.name) || f.type.includes("zip")) {
-        setStatus(`Opening ${f.name}…`);
+        setStatus("opening", { file: f.name });
         entries.push(...await readZip(await f.arrayBuffer()));
       } else if (/\.json$/i.test(f.name)) {
         entries.push({ name: f.name, loose: true, json: async () => JSON.parse(await f.text()) });
@@ -679,16 +909,16 @@ async function loadFiles(fileList) {
     const looksLike = source === "spotify"
       ? (!pickHistoryFiles(entries).length && pickYouTubeFiles(entries.filter(e => !e.loose)).length ? "youtube" : null)
       : (pickHistoryFiles(entries).length ? "spotify" : null);
-    if (looksLike) throw new Error(`This looks like a ${SOURCES[looksLike].name} export. Choose ${SOURCES[looksLike].name} above and upload it again.`);
+    if (looksLike) throw fail("wrongSource", { name: SOURCES[looksLike].name });
     const picked = src.pick(entries);
     if (!picked.length) {
       if (source === "youtube" && entries.some(e => /youtube/i.test(e.name) && /\.html?$/i.test(e.name)))
-        throw new Error("This YouTube export is in HTML format. Export it again from Google Takeout and, under Multiple formats, change history to JSON.");
-      throw new Error(src.notFound);
+        throw fail("htmlExport");
+      throw fail(src.notFound);
     }
     const recs = [];
     for (let i = 0; i < picked.length; i++) {
-      setStatus(`Reading ${picked[i].name.split("/").pop()} (${i + 1} of ${picked.length})…`);
+      setStatus("reading", { file: picked[i].name.split("/").pop(), i: i + 1, n: picked.length });
       await new Promise(r => setTimeout(r)); // let the status message paint
       let data;
       try { data = await picked[i].json(); } catch (e) {
@@ -697,17 +927,19 @@ async function loadFiles(fileList) {
       }
       if (Array.isArray(data)) recs.push(data);
     }
-    setStatus("Building your dashboard…");
+    setStatus("building");
     await new Promise(r => setTimeout(r));
     const result = src.aggregate(recs);
-    if (src.empty(result)) throw new Error(src.noData);
-    setStatus("");
+    if (src.empty(result)) throw fail(src.noData);
+    setStatus(null);
     showDashboard(result, true);
     if (window.goatcounter && window.goatcounter.count)
       window.goatcounter.count({ path: "dashboard-" + source, title: `Dashboard generated (${src.name})`, event: true });
   } catch (err) {
     console.error(err);
-    setStatus(err.message || "Something went wrong while reading the file.", true);
+    if (err.i18n) setStatus(err.i18n, err.vars, true);
+    else if (err.message) setStatus("raw", { msg: err.message }, true);
+    else setStatus("genericError", {}, true);
   }
 }
 
@@ -730,14 +962,16 @@ const dlg = $("howDlg");
 $("howBtn").onclick = $("howLink").onclick = () => { setHow(isYT() ? "youtube" : $("dashView").hidden ? source : "spotify"); dlg.showModal(); };
 $("howClose").onclick = () => dlg.close();
 const HOW_SITES = {
-  spotify: ["https://www.spotify.com/account/privacy/", "Open Spotify privacy page"],
-  youtube: ["https://takeout.google.com/", "Open Google Takeout"],
+  spotify: ["https://www.spotify.com/account/privacy/", "openSpotify"],
+  youtube: ["https://takeout.google.com/", "openTakeout"],
 };
+let how = "spotify";
 function setHow(which) {
+  how = which;
   document.querySelectorAll("#howSeg button").forEach(b => b.setAttribute("aria-pressed", b.dataset.how === which));
   document.querySelectorAll("[data-how-panel]").forEach(p => { p.hidden = p.dataset.howPanel !== which; });
   $("howSite").href = HOW_SITES[which][0];
-  $("howSite").textContent = HOW_SITES[which][1];
+  $("howSite").textContent = t(HOW_SITES[which][1]);
 }
 document.querySelectorAll("#howSeg button").forEach(b => b.addEventListener("click", () => setHow(b.dataset.how)));
 dlg.addEventListener("click", e => { if (e.target === dlg) dlg.close(); });
@@ -759,8 +993,8 @@ const yearSel = $("year");
 let YT = null; // YouTube result ({variants: {all, music}}); DATA is then the active variant
 let mode = "streams", sortKey = "amount", sortDir = -1, query = "";
 const MODES = {
-  spotify: [["streams", "Streams ≥ 30s"], ["plays", "All plays"]],
-  youtube: [["all", "All videos"], ["music", "Music only"]],
+  spotify: [["streams", "modeStreams"], ["plays", "modePlays"]],
+  youtube: [["all", "modeAll"], ["music", "modeMusic"]],
 };
 const isYT = () => !!YT;
 
@@ -781,18 +1015,7 @@ function showDashboard(data, fresh) {
   $("uploadBtn").hidden = false;
   $("shareBtn").hidden = false;
   $("channelsCard").hidden = !isYT();
-  $("modeSeg").innerHTML = MODES[isYT() ? "youtube" : "spotify"].map(([m, label]) => {
-    const empty = isYT() && !YT.variants[m].views.all.summary.streams;
-    return `<button type="button" data-mode="${m}" aria-pressed="${m === mode}"${empty ? ' disabled title="No YouTube Music plays in this export"' : ""}>${label}</button>`;
-  }).join("");
-  if (isYT()) {
-    const sk = YT.skipped, n = sk.removed + sk.ads;
-    $("footer").textContent = "YouTube doesn't record how long you watched, so every video you opened counts as one play. "
-      + "Community posts" + (n ? `, ads and ${fmt(n)} removed or private videos` : " and removed videos") + " are excluded. "
-      + "In Music only, songs are grouped by artist + title and “ - Topic” is removed from channel names.";
-  } else {
-    $("footer").textContent = "Songs are grouped by artist + title, so the same track released on several albums counts once. Podcasts, audiobooks and videos are excluded.";
-  }
+  renderChrome();
   let start = "all";
   if (!fresh) {
     try { const h = location.hash.match(/year=(\d{4})/); if (h && DATA.views[h[1]]) start = h[1]; } catch (e) {}
@@ -800,18 +1023,32 @@ function showDashboard(data, fresh) {
   loadVariant(start);
 }
 
+// Count-mode buttons and footer note (depend on the source and the language)
+function renderChrome() {
+  $("modeSeg").innerHTML = MODES[isYT() ? "youtube" : "spotify"].map(([m, label]) => {
+    const empty = isYT() && !YT.variants[m].views.all.summary.streams;
+    return `<button type="button" data-mode="${m}" aria-pressed="${m === mode}"${empty ? ` disabled title="${esc(t("noMusic"))}"` : ""}>${esc(t(label))}</button>`;
+  }).join("");
+  if (isYT()) {
+    const sk = YT.skipped, n = sk.removed + sk.ads;
+    $("footer").textContent = [t("footerYT"), n ? t("footerYTExcluded", { n: fmt(n) }) : t("footerYTExcluded0"), t("footerYTMusic")].join(" ");
+  } else {
+    $("footer").textContent = t("footerSpotify");
+  }
+}
+
 // (Re)draws everything that depends on DATA: year list, chart, labels, tables.
 function loadVariant(start) {
-  yearSel.innerHTML = `<option value="all">All years</option>` +
+  yearSel.innerHTML = `<option value="all">${esc(t("allYears"))}</option>` +
     DATA.years.slice().reverse().map(([y]) => `<option value="${y}">${y}</option>`).join("");
-  const words = isYT()
-    ? (mode === "music" ? ["Song", "Artist", "First played", "Top artists", "Artist", "Unique songs"] : ["Video", "Channel", "First watched", "Top channels", "Channel", "Unique videos"])
-    : ["Song", "Artist", mode === "streams" ? "First streamed" : "First played"];
+  const words = (isYT()
+    ? (mode === "music" ? ["song", "artist", "firstPlayed", "topArtists", "artist"] : ["video", "channel", "firstWatched", "topChannels", "channel"])
+    : ["song", "artist", mode === "streams" ? "firstStreamed" : "firstPlayed"]).map(k => t(k));
   $("nameHead").textContent = words[0];
   $("artistHead").textContent = words[1];
   document.querySelector('th[data-key="first"]').textContent = words[2];
-  if (isYT()) { $("channelsTitle").textContent = words[3]; $("chHead").textContent = words[4]; }
-  $("q").placeholder = isYT() && mode === "all" ? "Search video or channel…" : "Search song, artist or album…";
+  if (isYT()) { $("channelsTitle").textContent = words[3]; $("chHead").textContent = words[4]; $("chFirst").textContent = words[2]; $("chCount").textContent = t(mode === "music" ? "songs" : "videos"); }
+  $("q").placeholder = t(isYT() && mode === "all" ? "searchVideos" : "searchSongs");
   drawYears();
   setYear(DATA.views[start] ? start : "all");
 }
@@ -831,35 +1068,38 @@ function unit() { return !isYT() ? "streams" : mode === "music" ? "plays" : "vid
 
 function renderSummary() {
   const V = DATA.views[year], S = V.summary, all = DATA.views.all.summary;
-  const what = !isYT() ? "Spotify listening history" : mode === "music" ? "YouTube Music history" : "YouTube watch history";
-  $("range").textContent = `${what} · ${fmtDate(all.first)} – ${fmtDate(all.last)}` + (year === "all" ? "" : ` · showing ${year}`);
+  const what = t(!isYT() ? "histSpotify" : mode === "music" ? "histYTMusic" : "histYT");
+  $("range").textContent = `${what} · ${fmtDate(all.first)} – ${fmtDate(all.last)}` + (year === "all" ? "" : ` · ${t("showing", { y: year })}`);
   const t1 = V.top_streams[0], top1 = t1 && DATA.tracks[t1[0]];
-  const label = year === "all" ? "" : ` in ${year}`;
+  const label = year === "all" ? "" : " " + t("inYear", { y: year });
   let tiles;
   if (isYT()) {
     const c1 = (V.top_channels || [])[0], music = mode === "music";
     tiles = [
-      [music ? "Songs played" : "Videos watched", fmt(S.streams), "every play counts" + label],
-      [music ? "Unique songs" : "Unique videos", fmt(S.tracks), label.trim()],
-      [music ? "Artists" : "Channels", fmt(S.artists), label.trim()],
-      [music ? "Top artist" : "Top channel", c1 ? fmt(c1[2]) : "—", c1 ? esc(c1[0]) : ""],
-      [music ? "Most played" : "Most watched", t1 ? fmt(t1[1]) : "—", top1 ? esc(top1[0]) + " · " + esc(top1[1]) : ""],
+      [t(music ? "tSongsPlayed" : "tVideosWatched"), fmt(S.streams), t("tEveryPlay") + label],
+      [t(music ? "tUniqueSongs" : "tUniqueVideos"), fmt(S.tracks), label.trim()],
+      [t(music ? "tArtists" : "tChannels"), fmt(S.artists), label.trim()],
+      [t(music ? "tTopArtist" : "tTopChannel"), c1 ? fmt(c1[2]) : "—", c1 ? esc(c1[0]) : ""],
+      [t(music ? "tMostPlayed" : "tMostWatched"), t1 ? fmt(t1[1]) : "—", top1 ? esc(top1[0]) + " · " + esc(top1[1]) : ""],
     ];
   } else {
     tiles = [
-      ["Total streams", fmt(S.streams), "plays ≥ 30 seconds" + label],
-      ["Hours listened", fmt(S.hours), `≈ ${fmt(Math.round(S.hours / 24))} days`],
-      ["Unique songs", fmt(S.tracks), "streamed at least once" + label],
-      ["Unique artists", fmt(S.artists), label.trim()],
-      ["Most streamed", t1 ? fmt(t1[1]) : "—", top1 ? esc(top1[0]) + " · " + esc(top1[1]) : ""],
+      [t("tTotalStreams"), fmt(S.streams), t("tPlays30") + label],
+      [t("tHours"), fmt(S.hours), t("tDays", { n: fmt(Math.round(S.hours / 24)) })],
+      [t("tUniqueSongs"), fmt(S.tracks), t("tStreamedOnce") + label],
+      [t("tUniqueArtists"), fmt(S.artists), label.trim()],
+      [t("tMostStreamed"), t1 ? fmt(t1[1]) : "—", top1 ? esc(top1[0]) + " · " + esc(top1[1]) : ""],
     ];
   }
   $("tiles").innerHTML = tiles.map(([l, v, n]) => `<div class="card tile"><div class="label">${l}</div><div class="value">${v}</div><div class="note">${n}</div></div>`).join("");
-  $("tableTitle").textContent = (!isYT() ? "Top 500 most-streamed songs" : mode === "music" ? "Top 500 most-played songs" : "Top 500 most-watched videos") + label;
+  $("tableTitle").textContent = t(!isYT() ? "top500Streamed" : mode === "music" ? "top500Played" : "top500Watched") + label;
 }
 
 // One bar per year; when the history covers a single year, one bar per month instead.
-const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const monthName = m => {
+  const s = new Date(Date.UTC(2000, m, 1)).toLocaleDateString(I18N[LANG]._locale, { month: "short", timeZone: "UTC" }).replace(".", "");
+  return s[0].toUpperCase() + s.slice(1);
+};
 const byMonth = () => DATA.years.length === 1 && DATA.months?.length > 1;
 
 function highlightYear() {
@@ -872,10 +1112,10 @@ function drawYears() {
   const el = $("yearChart"), tip = $("tip");
   el.querySelectorAll("svg, .labels").forEach(n => n.remove());
   const monthly = byMonth(), u = unit();
-  const U = u[0].toUpperCase() + u.slice(1);
-  $("chartTitle").textContent = `${U} per ${monthly ? "month" : "year"}`;
-  $("chartSub").textContent = (isYT() ? "Every play counts" : "Plays of 30 seconds or more")
-    + (monthly ? ` · your history covers only ${DATA.years[0][0]}` : " · click a bar to filter by that year");
+  const chartTitle = t(u + (monthly ? "Month" : "Year")), uLabel = t("u" + u[0].toUpperCase() + u.slice(1));
+  $("chartTitle").textContent = chartTitle;
+  $("chartSub").textContent = t(isYT() ? "subYT" : "subSpotify")
+    + " · " + (monthly ? t("onlyYear", { y: DATA.years[0][0] }) : t("clickBar"));
   const W = 1000, H = 240, m = { t: 10, r: 0, b: 24, l: 44 };
   const ys = monthly ? DATA.months : DATA.years, max = Math.max(1, ...ys.map(y => y[1]));
   // round tick step (1, 2, 2.5 or 5 × 10^n) giving about four gridlines
@@ -885,8 +1125,8 @@ function drawYears() {
   const ticks = Array.from({ length: Math.round(top / step) + 1 }, (_, i) => i * step);
   const bw = (W - m.l - m.r) / ys.length, iw = H - m.t - m.b;
   const y = v => m.t + iw - (v / top) * iw;
-  const name = k => monthly ? MONTHS[+k.slice(5, 7) - 1] : k;
-  let svg = `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="${U} per ${monthly ? "month" : "year"}">`;
+  const name = k => monthly ? monthName(+k.slice(5, 7) - 1) : k;
+  let svg = `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="${esc(chartTitle)}">`;
   ticks.forEach(t => {
     svg += `<line class="gridline" x1="${m.l}" x2="${W - m.r}" y1="${y(t)}" y2="${y(t)}"/>`;
   });
@@ -914,7 +1154,7 @@ function drawYears() {
     h.addEventListener("mousemove", e => {
       const i = +h.dataset.i, [yr, s, hrs] = ys[i];
       bars.forEach(b => b.classList.toggle("active", +b.dataset.i === i));
-      tip.innerHTML = `<b>${monthly ? name(yr) + " " + yr.slice(0, 4) : yr}</b>${fmt(s)} <span>${u}</span>` + (hrs == null ? "" : `<br>${fmt(hrs)} <span>hours</span>`);
+      tip.innerHTML = `<b>${monthly ? name(yr) + " " + yr.slice(0, 4) : yr}</b>${fmt(s)} <span>${uLabel}</span>` + (hrs == null ? "" : `<br>${fmt(hrs)} <span>${t("uHours")}</span>`);
       tip.style.display = "block";
       const r = el.getBoundingClientRect();
       let left = e.clientX - r.left + 12;
@@ -931,7 +1171,8 @@ function drawYears() {
 function renderChannels() {
   if (!isYT()) return;
   const list = DATA.views[year].top_channels || [], max = list[0]?.[2] || 1;
-  $("channelsSub").textContent = `${fmt(list.length)}${list.length === YT_TOP_CHANNELS ? "+" : ""} ${mode === "music" ? "artists" : "channels"} by number of plays` + (year === "all" ? "" : ` in ${year}`);
+  $("channelsSub").textContent = t(mode === "music" ? "chSubArtists" : "chSubChannels", { n: fmt(list.length) + (list.length === YT_TOP_CHANNELS ? "+" : "") })
+    + (year === "all" ? "" : " " + t("inYear", { y: year }));
   $("chRows").innerHTML = list.map(([name, url, plays, vids, first], i) => {
     const link = /^https:\/\/(www\.)?youtube\.com\//.test(url || "") ? `<a href="${esc(url)}" target="_blank" rel="noopener">${esc(name)}</a>` : `<a>${esc(name)}</a>`;
     return `<tr>
@@ -975,8 +1216,8 @@ function render() {
     const c = typeof A === "string" ? A.localeCompare(B) : A - B;
     return c * sortDir || a.rank - b.rank;
   });
-  const noun = isYT() && mode === "all" ? "videos" : "songs";
-  countEl.textContent = query ? `${list.length} of ${fmt(total)}` : `${fmt(total)} ${noun}`;
+  countEl.textContent = query ? t("countOf", { a: fmt(list.length), b: fmt(total) })
+    : t(isYT() && mode === "all" ? "countVideos" : "countSongs", { n: fmt(total) });
   rowsEl.innerHTML = list.map(r => `<tr>
     <td class="rank">${r.rank}</td>
     <td class="song">${trackLink(r)}<div class="album col-album">${esc(r.album)}</div></td>
@@ -1003,7 +1244,7 @@ $("modeSeg").addEventListener("click", e => {
   mode = b.dataset.mode;
   $("modeSeg").querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", x === b));
   if (isYT()) { DATA = YT.variants[mode]; loadVariant(year); }
-  else { document.querySelector('th[data-key="first"]').textContent = mode === "streams" ? "First streamed" : "First played"; render(); }
+  else { document.querySelector('th[data-key="first"]').textContent = t(mode === "streams" ? "firstStreamed" : "firstPlayed"); render(); }
 });
 
 // ---------------------------------------------------------------------------
@@ -1036,13 +1277,13 @@ function drawStory() {
   const music = mode === "music", yt = isYT();
   const y0 = (all.first || "").slice(0, 4), y1 = (all.last || "").slice(0, 4);
   const period = year !== "all" ? year : y0 === y1 ? y0 : `${y0} – ${y1}`;
-  const title = !yt ? "My Spotify" : music ? "My YouTube Music" : "My YouTube";
-  const stats = !yt
-    ? [[S.streams, "streams"], [S.hours, "hours"], [S.tracks, "songs"]]
-    : music ? [[S.streams, "plays"], [S.tracks, "songs"], [S.artists, "artists"]]
-    : [[S.streams, "videos watched"], [S.tracks, "unique videos"], [S.artists, "channels"]];
-  const short = n => n >= 1e6 ? (n / 1e6).toFixed(1).replace(/\.0$/, "") + "M"
-    : n >= 1e5 ? Math.round(n / 1000) + "k" : n >= 1e4 ? (n / 1000).toFixed(1).replace(/\.0$/, "") + "k" : fmt(n);
+  const title = t(!yt ? "sMySpotify" : music ? "sMyYTMusic" : "sMyYT");
+  const stats = (!yt
+    ? [[S.streams, "sStreams"], [S.hours, "sHours"], [S.tracks, "sSongs"]]
+    : music ? [[S.streams, "sPlays"], [S.tracks, "sSongs"], [S.artists, "sArtists"]]
+    : [[S.streams, "sVideosWatched"], [S.tracks, "sUniqueVideos"], [S.artists, "sChannels"]]).map(([v, k]) => [v, t(k)]);
+  const dec = (n, d) => n.toLocaleString(I18N[LANG]._numLocale, { maximumFractionDigits: d });
+  const short = n => n >= 1e6 ? dec(n / 1e6, 1) + "M" : n >= 1e5 ? dec(Math.round(n / 1000), 0) + "k" : n >= 1e4 ? dec(n / 1000, 1) + "k" : fmt(n);
   // shrink a big number until it fits its column instead of cutting it
   const big = (t, x, y, maxW) => {
     let size = 84;
@@ -1069,7 +1310,7 @@ function drawStory() {
   const top = dataset().slice(0, 5), chans = yt ? (V.top_channels || []).slice(0, 3) : [];
   const rowH = chans.length ? 100 : 150;
   y += 170;
-  text(!yt || music ? "Top songs" : "Top videos", X, y, 44, TEXT, 700);
+  text(t(!yt || music ? "sTopSongs" : "sTopVideos"), X, y, 44, TEXT, 700);
   y += 30;
   top.forEach((r, i) => {
     const ry = y + i * rowH + 70;
@@ -1081,7 +1322,7 @@ function drawStory() {
   y += top.length * rowH + 40;
   if (chans.length) {
     y += 50;
-    text(music ? "Top artists" : "Top channels", X, y, 44, TEXT, 700);
+    text(t(music ? "sTopArtists" : "sTopChannels"), X, y, 44, TEXT, 700);
     chans.forEach(([name, , plays], i) => {
       const ry = y + 66 + i * 62;
       text(String(i + 1), X, ry, 44, ACCENT, 800);
@@ -1095,7 +1336,7 @@ function drawStory() {
   const site = SITE_URL ? SITE_URL.replace(/^https?:\/\//, "").replace(/\/$/, "")
     : hosted ? location.host + location.pathname.replace(/\/(index\.html|dashboard\.html)?$/, "") : "";
   if (site) {
-    text("See yours at", W / 2, H - 290, 34, MUTED, 500, MAXW, "center");
+    text(t("sSeeYours"), W / 2, H - 290, 34, MUTED, 500, MAXW, "center");
     let size = 44;
     g.font = `700 ${size}px ${F}`;
     while (size > 26 && g.measureText(site).width > MAXW - 70) g.font = `700 ${--size}px ${F}`;
@@ -1120,9 +1361,7 @@ $("shareBtn").onclick = async () => {
   $("storyImg").src = storyUrl;
   const canShare = !!(navigator.canShare && navigator.canShare({ files: [storyFile] }));
   $("storyShare").hidden = !canShare;
-  $("shareNote").textContent = canShare
-    ? "Tap Share… and choose Instagram, then Stories. If Instagram isn't listed, download the image and add it from your camera roll."
-    : "Download the image, send it to your phone, and add it to your story from Instagram. On a phone, this button opens the share sheet instead.";
+  $("shareNote").textContent = t(canShare ? "shareNoteYes" : "shareNoteNo");
   shareDlg.showModal();
 };
 $("storyShare").onclick = async () => {
@@ -1140,7 +1379,33 @@ $("storyDownload").onclick = () => {
 $("shareClose").onclick = () => shareDlg.close();
 shareDlg.addEventListener("click", e => { if (e.target === shareDlg) shareDlg.close(); });
 
+// ---------------------------------------------------------------------------
+// Language selector: re-translates static text and redraws whatever is on screen
+// ---------------------------------------------------------------------------
+function applyStatic() {
+  document.documentElement.lang = I18N[LANG]._locale;
+  document.querySelectorAll("[data-i18n]").forEach(el => { el.textContent = t(el.dataset.i18n); });
+  document.querySelectorAll("[data-i18n-html]").forEach(el => { el.innerHTML = t(el.dataset.i18nHtml); });
+  document.querySelectorAll("[data-i18n-aria]").forEach(el => el.setAttribute("aria-label", t(el.dataset.i18nAria)));
+  document.querySelectorAll("[data-i18n-alt]").forEach(el => { el.alt = t(el.dataset.i18nAlt); });
+}
+const langSel = $("lang");
+langSel.innerHTML = LANGS.map(([k, name]) => `<option value="${k}">${name}</option>`).join("");
+langSel.value = LANG;
+langSel.addEventListener("change", () => {
+  LANG = langSel.value;
+  try { localStorage.setItem("ds-lang", LANG); } catch (e) {}
+  applyStatic();
+  setHow(how);
+  const st = statusState;
+  setSource(source);
+  if (st) setStatus(st.key, st.vars, st.error); // keep a message that was showing, now translated
+  if (DATA && !$("dashView").hidden) { renderChrome(); loadVariant(year); }
+  if (shareDlg.open) $("shareBtn").onclick();
+});
+
 // Start: prebuilt data (from build.py) shows the dashboard, otherwise the upload screen
+applyStatic();
 setSource(source);
 if (DATA) showDashboard(DATA, false);
 else showUpload();
