@@ -1,0 +1,656 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Musify Dashboard</title>
+<style>
+  :root {
+    color-scheme: light;
+    --bg: #f4f4f2;
+    --surface-1: #fcfcfb;
+    --border: #e4e3de;
+    --grid: #ebeae6;
+    --text-primary: #0b0b0b;
+    --text-secondary: #52514e;
+    --text-muted: #7a7974;
+    --series-1: #2a78d6;
+    --series-1-soft: rgba(42,120,214,.12);
+    --row-hover: #f1f0ec;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --bg: #111110;
+      --surface-1: #1a1a19;
+      --border: #2c2c2a;
+      --grid: #262624;
+      --text-primary: #ffffff;
+      --text-secondary: #c3c2b7;
+      --text-muted: #8f8e86;
+      --series-1: #3987e5;
+      --series-1-soft: rgba(57,135,229,.18);
+      --row-hover: #222221;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --bg: #111110;
+    --surface-1: #1a1a19;
+    --border: #2c2c2a;
+    --grid: #262624;
+    --text-primary: #ffffff;
+    --text-secondary: #c3c2b7;
+    --text-muted: #8f8e86;
+    --series-1: #3987e5;
+    --series-1-soft: rgba(57,135,229,.18);
+    --row-hover: #222221;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text-primary);
+    font: 14px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 32px 16px 64px; }
+  header { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px; margin-bottom: 24px; }
+  h1 { font-size: 28px; margin: 0; letter-spacing: -.02em; }
+  .sub { color: var(--text-secondary); margin-top: 4px; }
+  h2 { font-size: 16px; margin: 0 0 4px; }
+  .card { background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin-bottom: 16px; }
+  .tile .label { color: var(--text-secondary); font-size: 13px; }
+  .tile .value { font-size: 28px; font-weight: 650; letter-spacing: -.02em; font-variant-numeric: tabular-nums; margin-top: 2px; }
+  .tile .note { color: var(--text-muted); font-size: 12px; }
+  section { margin-bottom: 16px; }
+  .chart { position: relative; margin-top: 12px; }
+  .chart svg { display: block; width: 100%; height: 240px; overflow: visible; }
+  .chart .tick { fill: var(--text-muted); font-size: 11px; }
+  .chart .gridline { stroke: var(--grid); stroke-width: 1; }
+  .chart .bar { fill: var(--series-1); }
+  .chart .hit:hover + .bar, .chart .bar.active { opacity: .8; }
+  .tooltip {
+    position: absolute; pointer-events: none; background: var(--surface-1); border: 1px solid var(--border);
+    border-radius: 8px; padding: 8px 10px; font-size: 12px; box-shadow: 0 4px 16px rgba(0,0,0,.12);
+    white-space: nowrap; display: none; z-index: 2;
+  }
+  .tooltip b { display: block; font-size: 13px; }
+  .tooltip span { color: var(--text-secondary); }
+  .controls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 12px 0; }
+  input[type=search] {
+    flex: 1 1 240px; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border);
+    background: var(--bg); color: var(--text-primary); font: inherit;
+  }
+  .seg { display: inline-flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .seg button {
+    border: 0; background: transparent; color: var(--text-secondary); padding: 8px 12px; font: inherit; cursor: pointer;
+  }
+  .seg button[aria-pressed=true] { background: var(--series-1-soft); color: var(--text-primary); font-weight: 600; }
+  .count { color: var(--text-muted); font-size: 13px; }
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+  th, td { padding: 9px 10px; text-align: left; border-bottom: 1px solid var(--border); vertical-align: middle; }
+  th { color: var(--text-secondary); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: .04em;
+       position: sticky; top: 0; background: var(--surface-1); cursor: pointer; user-select: none; white-space: nowrap; }
+  th[aria-sort]::after { content: " ▾"; color: var(--text-muted); }
+  th[aria-sort=ascending]::after { content: " ▴"; }
+  tbody tr:hover { background: var(--row-hover); }
+  td.rank { color: var(--text-muted); width: 48px; }
+  td.num { text-align: right; white-space: nowrap; }
+  th.num { text-align: right; }
+  .song a { color: var(--text-primary); text-decoration: none; font-weight: 550; }
+  .song a:hover { text-decoration: underline; }
+  .album { color: var(--text-muted); font-size: 12px; }
+  .artist { color: var(--text-secondary); }
+  .amount { display: flex; align-items: center; gap: 8px; justify-content: flex-end; }
+  .meter { width: 80px; height: 6px; background: var(--grid); border-radius: 3px; overflow: hidden; flex: none; }
+  .meter i { display: block; height: 100%; background: var(--series-1); border-radius: 3px; }
+  .date { white-space: nowrap; color: var(--text-secondary); }
+  .head-controls { display: flex; gap: 8px; align-items: center; }
+  .year-select { display: flex; align-items: center; gap: 8px; color: var(--text-secondary); font-size: 13px; }
+  select {
+    padding: 6px 10px; border-radius: 8px; border: 1px solid var(--border);
+    background: var(--surface-1); color: var(--text-primary); font: inherit; cursor: pointer;
+  }
+  .chart .hit { cursor: pointer; }
+  .chart.has-sel .bar { opacity: .35; }
+  .chart.has-sel .bar.sel { opacity: 1; }
+  .theme-btn { border: 1px solid var(--border); background: var(--surface-1); color: var(--text-secondary);
+               border-radius: 8px; padding: 6px 10px; font: inherit; cursor: pointer; }
+  footer { color: var(--text-muted); font-size: 12px; margin-top: 16px; }
+  @media (max-width: 640px) {
+    .meter, .col-album, .col-mins { display: none; }
+    th, td { padding: 8px 6px; }
+  }
+  .btn {
+    border: 1px solid var(--border); background: var(--surface-1); color: var(--text-secondary);
+    border-radius: 8px; padding: 6px 10px; font: inherit; cursor: pointer; white-space: nowrap;
+  }
+  .btn:hover { color: var(--text-primary); }
+  .btn.primary { background: var(--series-1); border-color: var(--series-1); color: #fff; font-weight: 600; }
+  .btn.primary:hover { filter: brightness(1.08); }
+  .head-controls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .year-select { display: flex; align-items: center; gap: 8px; color: var(--text-secondary); font-size: 13px; }
+  select {
+    padding: 6px 10px; border-radius: 8px; border: 1px solid var(--border);
+    background: var(--surface-1); color: var(--text-primary); font: inherit; cursor: pointer;
+  }
+  .chart .hit { cursor: pointer; }
+  .chart.has-sel .bar { opacity: .35; }
+  .chart.has-sel .bar.sel { opacity: 1; }
+  [hidden] { display: none !important; }
+
+  /* Upload screen */
+  .upload { text-align: center; padding: 48px 20px; }
+  .drop {
+    border: 2px dashed var(--border); border-radius: 12px; padding: 40px 20px; margin: 20px auto 0; max-width: 560px;
+    transition: border-color .15s, background .15s;
+  }
+  .drop.over, body.dragging .drop { border-color: var(--series-1); background: var(--series-1-soft); }
+  .drop .big { font-size: 18px; font-weight: 600; margin-bottom: 6px; }
+  .drop .btn { margin-top: 14px; padding: 9px 16px; }
+  .privacy { color: var(--text-muted); font-size: 12px; margin-top: 14px; }
+  .status { margin-top: 16px; color: var(--text-secondary); min-height: 1.45em; }
+  .status.error { color: #d03b3b; }
+  .linklike { background: none; border: 0; padding: 0; color: var(--series-1); font: inherit; cursor: pointer; text-decoration: underline; }
+
+  /* Instructions dialog */
+  dialog {
+    border: 1px solid var(--border); border-radius: 12px; padding: 0; max-width: 560px; width: calc(100% - 32px);
+    background: var(--surface-1); color: var(--text-primary); box-shadow: 0 12px 40px rgba(0,0,0,.25);
+  }
+  dialog::backdrop { background: rgba(0,0,0,.45); }
+  .dlg-body { padding: 24px; }
+  .dlg-body h2 { font-size: 18px; margin-bottom: 12px; }
+  .dlg-body ol { padding-left: 20px; margin: 0; }
+  .dlg-body li { margin-bottom: 10px; color: var(--text-secondary); }
+  .dlg-body li b { color: var(--text-primary); }
+  .dlg-body a { color: var(--series-1); }
+  .dlg-note { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; font-size: 13px; color: var(--text-secondary); margin-top: 14px; }
+  .dlg-actions { display: flex; justify-content: flex-end; gap: 8px; padding: 0 24px 20px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Musify Dashboard</h1>
+      <div class="sub" id="range">Your Spotify listening history, visualised</div>
+    </div>
+    <div class="head-controls">
+      <button class="btn" id="howBtn" type="button">How to get your Spotify data</button>
+      <label class="year-select" id="yearWrap" hidden>Year
+        <select id="year"><option value="all">All years</option></select>
+      </label>
+      <button class="btn" id="uploadBtn" type="button" hidden>Upload another file</button>
+      <button class="btn" id="themeBtn" type="button">Toggle theme</button>
+    </div>
+  </header>
+
+  <input type="file" id="file" accept=".zip,.json,application/zip,application/json" multiple hidden>
+
+  <!-- Upload screen (shown when no data is loaded) -->
+  <section class="card upload" id="uploadView" hidden>
+    <h2>Upload your Spotify data</h2>
+    <div class="sub">Use the <b>my_spotify_data.zip</b> file that Spotify emails you. There's no need to unzip it.</div>
+    <div class="drop" id="drop">
+      <div class="big">Drop your zip file here</div>
+      <div class="sub">or</div>
+      <button class="btn primary" id="chooseBtn" type="button">Choose file</button>
+      <div class="privacy">Your file is processed in this browser. Nothing is uploaded to a server.</div>
+    </div>
+    <div class="status" id="status" role="status"></div>
+    <div class="sub" style="margin-top:8px">Don't have the file yet? <button class="linklike" id="howLink" type="button">See how to request it from Spotify</button></div>
+  </section>
+
+  <!-- Dashboard -->
+  <div id="dashView" hidden>
+    <div class="tiles" id="tiles"></div>
+
+    <section class="card">
+      <h2>Streams per year</h2>
+      <div class="sub">Plays of 30 seconds or more · click a bar to filter by that year</div>
+      <div class="chart" id="yearChart"><div class="tooltip" id="tip"></div></div>
+    </section>
+
+    <section class="card">
+      <h2 id="tableTitle">Top 500 most-streamed songs</h2>
+      <div class="controls">
+        <input type="search" id="q" placeholder="Search song, artist or album…" aria-label="Search">
+        <div class="seg" role="group" aria-label="Count mode">
+          <button type="button" data-mode="streams" aria-pressed="true">Streams ≥ 30s</button>
+          <button type="button" data-mode="plays" aria-pressed="false">All plays</button>
+        </div>
+        <span class="count" id="count"></span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th data-key="rank">#</th>
+              <th data-key="name">Song</th>
+              <th data-key="artist">Artist</th>
+              <th data-key="amount" class="num" aria-sort="descending">Amount</th>
+              <th data-key="mins" class="num col-mins">Minutes</th>
+              <th data-key="first">First streamed</th>
+            </tr>
+          </thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <footer>Songs are grouped by artist + title, so the same track released on several albums counts once. Podcasts, audiobooks and videos are excluded.</footer>
+  </div>
+</div>
+
+<dialog id="howDlg" aria-labelledby="howTitle">
+  <div class="dlg-body">
+    <h2 id="howTitle">How to get your Spotify data</h2>
+    <ol>
+      <li>Open your <a href="https://www.spotify.com/account/privacy/" target="_blank" rel="noopener">Spotify account privacy page</a> and log in.</li>
+      <li>Scroll to <b>Download your data</b> and tick <b>Extended streaming history</b>. This covers your whole listening history. <b>Account data</b> only includes the last year, but it works here too.</li>
+      <li>Click <b>Request data</b>, then open the email from Spotify and click its link to confirm the request.</li>
+      <li>Wait for a second email saying your data is ready. Spotify says this can take <b>up to 30 days</b>, but it often arrives sooner.</li>
+      <li>Download <b>my_spotify_data.zip</b> from that email and upload it here. You don't need to unzip it.</li>
+    </ol>
+    <div class="dlg-note">The download link in Spotify's email expires after a while, so download the file soon after it arrives. The file is read only in your browser and is never uploaded.</div>
+  </div>
+  <div class="dlg-actions">
+    <a class="btn" href="https://www.spotify.com/account/privacy/" target="_blank" rel="noopener" style="text-decoration:none">Open Spotify privacy page</a>
+    <button class="btn primary" type="button" id="howClose">Got it</button>
+  </div>
+</dialog>
+
+<script>
+let DATA = /*__DATA__*/null;
+const fmt = n => n.toLocaleString("en-US");
+const fmtDate = ts => ts ? new Date(ts).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" }) : "—";
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const $ = id => document.getElementById(id);
+
+// ---------------------------------------------------------------------------
+// Aggregation - mirrors build.py so uploaded files produce the same dashboard
+// ---------------------------------------------------------------------------
+/*__AGG_START__*/
+const TOP_N = 500, MIN_MS = 30000;
+
+// Normalises both export formats:
+//  - Extended streaming history: Streaming_History_Audio_*.json
+//  - Account data (last year):    StreamingHistory_music_*.json / StreamingHistory*.json
+function normalise(r) {
+  if ("ts" in r) {
+    return { ts: r.ts, ms: r.ms_played || 0, name: r.master_metadata_track_name,
+             artist: r.master_metadata_album_artist_name, album: r.master_metadata_album_album_name,
+             uri: r.spotify_track_uri };
+  }
+  if ("endTime" in r) {
+    return { ts: r.endTime.replace(" ", "T") + ":00Z", ms: r.msPlayed || 0, name: r.trackName,
+             artist: r.artistName, album: null, uri: null };
+  }
+  return null;
+}
+
+function aggregate(fileRecords) {
+  const tracks = new Map(), scopes = new Map();
+  const scope = k => {
+    if (!scopes.has(k)) scopes.set(k, { streams: 0, ms: 0, artists: new Set(), first: null, last: null });
+    return scopes.get(k);
+  };
+  scope("all");
+  for (const records of fileRecords) for (const raw of records) {
+    const r = normalise(raw);
+    if (!r || !r.name || !r.artist) continue; // podcasts / audiobooks / unknown
+    const { ts, ms } = r, year = ts.slice(0, 4);
+    const artistKey = r.artist.trim().toLowerCase();
+    const key = artistKey + "\u0000" + r.name.trim().toLowerCase();
+    let t = tracks.get(key);
+    if (!t) {
+      t = { name: r.name, artist: r.artist, album: r.album ?? null, uri: r.uri ?? null,
+            first_stream: null, first_play: null, last_stream: null, by_year: new Map() };
+      tracks.set(key, t);
+    }
+    let y = t.by_year.get(year);
+    if (!y) t.by_year.set(year, y = [0, 0, 0]);
+    y[1] += 1; y[2] += ms;
+    if (t.first_play === null || ts < t.first_play) t.first_play = ts;
+    if (ms >= MIN_MS) {
+      y[0] += 1;
+      if (t.first_stream === null || ts < t.first_stream) t.first_stream = ts;
+      if (t.last_stream === null || ts > t.last_stream) t.last_stream = ts;
+      for (const sc of [scope("all"), scope(year)]) {
+        sc.streams += 1; sc.ms += ms; sc.artists.add(artistKey);
+        if (sc.first === null || ts < sc.first) sc.first = ts;
+        if (sc.last === null || ts > sc.last) sc.last = ts;
+      }
+    }
+  }
+
+  const trackList = [], trackIdx = new Map();
+  const idx = t => {
+    if (!trackIdx.has(t)) {
+      trackIdx.set(t, trackList.length);
+      trackList.push([t.name, t.artist, t.album, t.uri, t.first_stream || t.first_play, t.first_play, t.last_stream]);
+    }
+    return trackIdx.get(t);
+  };
+  const all = [...tracks.values()];
+  const years = [...scopes.keys()].filter(k => k !== "all").sort();
+  const views = {};
+  for (const sk of ["all", ...years]) {
+    const c = new Map(all.map(t => {
+      if (sk === "all") {
+        const s = [0, 0, 0];
+        for (const v of t.by_year.values()) { s[0] += v[0]; s[1] += v[1]; s[2] += v[2]; }
+        return [t, s];
+      }
+      return [t, t.by_year.get(sk) || [0, 0, 0]];
+    }));
+    const top = i => all.filter(t => c.get(t)[i])
+      .sort((a, b) => (c.get(b)[i] - c.get(a)[i]) || (a.first_play < b.first_play ? -1 : a.first_play > b.first_play ? 1 : 0))
+      .slice(0, TOP_N)
+      .map(t => { const v = c.get(t); return [idx(t), v[0], v[1], Math.round(v[2] / 60000)]; });
+    const sc = scope(sk);
+    let n = 0;
+    for (const v of c.values()) if (v[0]) n++;
+    views[sk] = {
+      summary: { streams: sc.streams, hours: Math.round(sc.ms / 3600000), tracks: n,
+                 artists: sc.artists.size, first: sc.first, last: sc.last },
+      top_streams: top(0),
+      top_plays: top(1),
+    };
+  }
+  return {
+    years: years.map(y => [y, scopes.get(y).streams, Math.round(scopes.get(y).ms / 3600000)]),
+    tracks: trackList,
+    views,
+  };
+}
+
+// Minimal zip reader using the browser's built-in DecompressionStream (no libraries).
+async function readZip(buf) {
+  const dv = new DataView(buf), dec = new TextDecoder();
+  let eocd = -1;
+  for (let i = buf.byteLength - 22; i >= Math.max(0, buf.byteLength - 65557); i--) {
+    if (dv.getUint32(i, true) === 0x06054b50) { eocd = i; break; }
+  }
+  if (eocd < 0) throw new Error("This doesn't look like a valid zip file.");
+  const count = dv.getUint16(eocd + 10, true);
+  let p = dv.getUint32(eocd + 16, true);
+  const entries = [];
+  for (let n = 0; n < count; n++) {
+    if (dv.getUint32(p, true) !== 0x02014b50) throw new Error("The zip file is damaged.");
+    const method = dv.getUint16(p + 10, true), size = dv.getUint32(p + 20, true);
+    const nameLen = dv.getUint16(p + 28, true), extraLen = dv.getUint16(p + 30, true), commentLen = dv.getUint16(p + 32, true);
+    const local = dv.getUint32(p + 42, true);
+    const name = dec.decode(new Uint8Array(buf, p + 46, nameLen));
+    entries.push({
+      name,
+      async json() {
+        const start = local + 30 + dv.getUint16(local + 26, true) + dv.getUint16(local + 28, true);
+        const bytes = new Uint8Array(buf, start, size);
+        if (method === 0) return JSON.parse(dec.decode(bytes));
+        if (method !== 8) throw new Error(`Unsupported compression in ${name}.`);
+        const stream = new Blob([bytes]).stream().pipeThrough(new DecompressionStream("deflate-raw"));
+        return JSON.parse(await new Response(stream).text());
+      },
+    });
+    p += 46 + nameLen + extraLen + commentLen;
+  }
+  return entries;
+}
+
+// Picks the streaming-history files out of a list of {name, json()} entries.
+function pickHistoryFiles(entries) {
+  const base = e => e.name.split("/").pop();
+  const byName = (a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : 0);
+  const extended = entries.filter(e => /^Streaming_History_Audio_.*\.json$/i.test(base(e))).sort(byName);
+  if (extended.length) return extended;
+  return entries.filter(e => /^StreamingHistory(_music_)?\d+\.json$/i.test(base(e))).sort(byName);
+}
+/*__AGG_END__*/
+
+// ---------------------------------------------------------------------------
+// Upload
+// ---------------------------------------------------------------------------
+const statusEl = $("status");
+const setStatus = (msg, error) => { statusEl.textContent = msg; statusEl.classList.toggle("error", !!error); };
+
+async function loadFiles(fileList) {
+  const files = [...fileList];
+  if (!files.length) return;
+  showUpload();
+  try {
+    if (typeof DecompressionStream === "undefined") throw new Error("Your browser is too old to read zip files. Please use a recent version of Chrome, Edge, Firefox or Safari.");
+    let entries = [];
+    for (const f of files) {
+      if (/\.zip$/i.test(f.name) || f.type.includes("zip")) {
+        setStatus(`Opening ${f.name}…`);
+        entries.push(...await readZip(await f.arrayBuffer()));
+      } else if (/\.json$/i.test(f.name)) {
+        entries.push({ name: f.name, json: async () => JSON.parse(await f.text()) });
+      }
+    }
+    const picked = pickHistoryFiles(entries);
+    if (!picked.length) throw new Error("No streaming history found. The zip should contain files named Streaming_History_Audio_….json (or StreamingHistory_music_….json).");
+    const recs = [];
+    for (let i = 0; i < picked.length; i++) {
+      setStatus(`Reading ${picked[i].name.split("/").pop()} (${i + 1} of ${picked.length})…`);
+      await new Promise(r => setTimeout(r)); // let the status message paint
+      const data = await picked[i].json();
+      if (Array.isArray(data)) recs.push(data);
+    }
+    setStatus("Building your dashboard…");
+    await new Promise(r => setTimeout(r));
+    const result = aggregate(recs);
+    if (!result.views.all.summary.streams) throw new Error("The files were read, but they contain no music plays of 30 seconds or more.");
+    setStatus("");
+    showDashboard(result, true);
+  } catch (err) {
+    console.error(err);
+    setStatus(err.message || "Something went wrong while reading the file.", true);
+  }
+}
+
+const fileInput = $("file");
+fileInput.addEventListener("change", () => { loadFiles(fileInput.files); fileInput.value = ""; });
+$("chooseBtn").onclick = $("uploadBtn").onclick = () => fileInput.click();
+
+const drop = $("drop");
+let dragDepth = 0;
+document.addEventListener("dragenter", e => { e.preventDefault(); dragDepth++; document.body.classList.add("dragging"); });
+document.addEventListener("dragleave", () => { if (--dragDepth <= 0) { dragDepth = 0; document.body.classList.remove("dragging"); } });
+document.addEventListener("dragover", e => e.preventDefault());
+document.addEventListener("drop", e => {
+  e.preventDefault(); dragDepth = 0; document.body.classList.remove("dragging");
+  if (e.dataTransfer?.files?.length) loadFiles(e.dataTransfer.files);
+});
+
+// Instructions dialog
+const dlg = $("howDlg");
+$("howBtn").onclick = $("howLink").onclick = () => dlg.showModal();
+$("howClose").onclick = () => dlg.close();
+dlg.addEventListener("click", e => { if (e.target === dlg) dlg.close(); });
+
+// Theme toggle
+const root = document.documentElement;
+try { const t = localStorage.getItem("ds-theme"); if (t) root.dataset.theme = t; } catch (e) {}
+$("themeBtn").onclick = () => {
+  const dark = root.dataset.theme ? root.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+  root.dataset.theme = dark ? "light" : "dark";
+  try { localStorage.setItem("ds-theme", root.dataset.theme); } catch (e) {}
+};
+
+// ---------------------------------------------------------------------------
+// Dashboard
+// ---------------------------------------------------------------------------
+let year = "all";
+const yearSel = $("year");
+
+function showUpload() {
+  $("uploadView").hidden = false;
+}
+
+function showDashboard(data, fresh) {
+  DATA = data;
+  $("uploadView").hidden = true;
+  $("dashView").hidden = false;
+  $("yearWrap").hidden = false;
+  $("uploadBtn").hidden = false;
+  yearSel.innerHTML = `<option value="all">All years</option>` +
+    DATA.years.slice().reverse().map(([y]) => `<option value="${y}">${y}</option>`).join("");
+  let start = "all";
+  if (!fresh) {
+    try { const h = location.hash.match(/year=(\d{4})/); if (h && DATA.views[h[1]]) start = h[1]; } catch (e) {}
+  }
+  drawYears();
+  setYear(start);
+}
+
+function setYear(y) {
+  year = y;
+  yearSel.value = y;
+  try { history.replaceState(null, "", y === "all" ? location.pathname : "#year=" + y); } catch (e) {}
+  renderSummary();
+  highlightYear();
+  render();
+}
+yearSel.addEventListener("change", () => setYear(yearSel.value));
+
+function renderSummary() {
+  const S = DATA.views[year].summary, all = DATA.views.all.summary;
+  $("range").textContent = `Spotify listening history · ${fmtDate(all.first)} – ${fmtDate(all.last)}`
+    + (year === "all" ? "" : ` · showing ${year}`);
+  const t1 = DATA.views[year].top_streams[0], top1 = t1 && DATA.tracks[t1[0]];
+  const label = year === "all" ? "" : ` in ${year}`;
+  $("tiles").innerHTML = [
+    ["Total streams", fmt(S.streams), "plays ≥ 30 seconds" + label],
+    ["Hours listened", fmt(S.hours), `≈ ${fmt(Math.round(S.hours / 24))} days`],
+    ["Unique songs", fmt(S.tracks), "streamed at least once" + label],
+    ["Unique artists", fmt(S.artists), label.trim()],
+    ["Most streamed", t1 ? fmt(t1[1]) : "—", top1 ? esc(top1[0]) + " · " + esc(top1[1]) : ""],
+  ].map(([l, v, n]) => `<div class="card tile"><div class="label">${l}</div><div class="value">${v}</div><div class="note">${n}</div></div>`).join("");
+  $("tableTitle").textContent = "Top 500 most-streamed songs" + label;
+}
+
+function highlightYear() {
+  const el = $("yearChart");
+  el.classList.toggle("has-sel", year !== "all");
+  el.querySelectorAll(".bar").forEach(b => b.classList.toggle("sel", DATA.years[+b.dataset.i][0] === year));
+}
+
+function drawYears() {
+  const el = $("yearChart"), tip = $("tip");
+  el.querySelectorAll("svg, .labels").forEach(n => n.remove());
+  const W = 1000, H = 240, m = { t: 10, r: 0, b: 24, l: 44 };
+  const ys = DATA.years, max = Math.max(1, ...ys.map(y => y[1]));
+  const step = Math.pow(10, Math.floor(Math.log10(max))) / 2;
+  const top = Math.ceil(max / step) * step;
+  const ticks = [0, top / 4, top / 2, top * 3 / 4, top];
+  const bw = (W - m.l - m.r) / ys.length, iw = H - m.t - m.b;
+  const y = v => m.t + iw - (v / top) * iw;
+  let svg = `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="Streams per year">`;
+  ticks.forEach(t => {
+    svg += `<line class="gridline" x1="${m.l}" x2="${W - m.r}" y1="${y(t)}" y2="${y(t)}"/>`;
+  });
+  ys.forEach(([yr, s], i) => {
+    const x = m.l + i * bw + bw * 0.15, w = bw * 0.7, h = Math.max(0, y(0) - y(s)), r = Math.min(4, w / 2, h);
+    // bar with 4px rounded top, square at baseline
+    svg += `<rect class="hit" data-i="${i}" x="${m.l + i * bw}" y="${m.t}" width="${bw}" height="${iw}" fill="transparent"/>`;
+    svg += `<path class="bar" data-i="${i}" d="M${x},${y(0)} V${y(s) + r} Q${x},${y(s)} ${x + r},${y(s)} H${x + w - r} Q${x + w},${y(s)} ${x + w},${y(s) + r} V${y(0)} Z"/>`;
+  });
+  svg += `</svg>`;
+  el.insertAdjacentHTML("beforeend", svg);
+  // HTML labels (so they don't stretch with preserveAspectRatio=none)
+  const lab = document.createElement("div");
+  lab.className = "labels";
+  lab.style.cssText = "position:absolute;inset:0;pointer-events:none;font-size:11px;color:var(--text-muted)";
+  ticks.forEach(t => {
+    lab.insertAdjacentHTML("beforeend", `<div style="position:absolute;left:0;width:${m.l / W * 100 - 0.5}%;text-align:right;top:${y(t) / H * 100}%;transform:translateY(-50%)">${t >= 1000 ? fmt(t / 1000) + "k" : fmt(t)}</div>`);
+  });
+  ys.forEach(([yr], i) => {
+    lab.insertAdjacentHTML("beforeend", `<div style="position:absolute;left:${(m.l + (i + 0.5) * bw) / W * 100}%;bottom:0;transform:translateX(-50%)">${ys.length > 10 && innerWidth < 640 ? "’" + yr.slice(2) : yr}</div>`);
+  });
+  el.appendChild(lab);
+  const bars = el.querySelectorAll(".bar");
+  el.querySelectorAll(".hit").forEach(h => {
+    h.addEventListener("mousemove", e => {
+      const i = +h.dataset.i, [yr, s, hrs] = ys[i];
+      bars.forEach(b => b.classList.toggle("active", +b.dataset.i === i));
+      tip.innerHTML = `<b>${yr}</b>${fmt(s)} <span>streams</span><br>${fmt(hrs)} <span>hours</span>`;
+      tip.style.display = "block";
+      const r = el.getBoundingClientRect();
+      let left = e.clientX - r.left + 12;
+      if (left + tip.offsetWidth > r.width) left = e.clientX - r.left - tip.offsetWidth - 12;
+      tip.style.left = left + "px";
+      tip.style.top = (e.clientY - r.top - tip.offsetHeight - 8) + "px";
+    });
+    h.addEventListener("click", () => { const y = ys[+h.dataset.i][0]; setYear(year === y ? "all" : y); });
+    h.addEventListener("mouseleave", () => { tip.style.display = "none"; bars.forEach(b => b.classList.remove("active")); });
+  });
+}
+
+// Table
+let mode = "streams", sortKey = "amount", sortDir = -1, query = "";
+const rowsEl = $("rows"), countEl = $("count");
+function dataset() {
+  const v = DATA.views[year], src = mode === "streams" ? v.top_streams : v.top_plays;
+  return src.map(([ti, streams, plays, mins], i) => {
+    const t = DATA.tracks[ti];
+    return {
+      rank: i + 1, name: t[0], artist: t[1], album: t[2], uri: t[3],
+      amount: mode === "streams" ? streams : plays, mins,
+      first: mode === "streams" ? t[4] : t[5],
+    };
+  });
+}
+function render() {
+  let list = dataset();
+  const total = list.length;
+  const max = list[0]?.amount || 1;
+  if (query) {
+    const q = query.toLowerCase();
+    list = list.filter(r => (r.name + " " + r.artist + " " + (r.album || "")).toLowerCase().includes(q));
+  }
+  list.sort((a, b) => {
+    const A = a[sortKey], B = b[sortKey];
+    const c = typeof A === "string" ? A.localeCompare(B) : A - B;
+    return c * sortDir || a.rank - b.rank;
+  });
+  countEl.textContent = query ? `${list.length} of ${fmt(total)}` : `${fmt(total)} songs`;
+  rowsEl.innerHTML = list.map(r => {
+    const id = (r.uri || "").split(":").pop();
+    const song = id ? `<a href="https://open.spotify.com/track/${esc(id)}" target="_blank" rel="noopener">${esc(r.name)}</a>` : `<a>${esc(r.name)}</a>`;
+    return `<tr>
+    <td class="rank">${r.rank}</td>
+    <td class="song">${song}<div class="album col-album">${esc(r.album)}</div></td>
+    <td class="artist">${esc(r.artist)}</td>
+    <td class="num"><div class="amount"><span class="meter"><i style="width:${(r.amount / max * 100).toFixed(1)}%"></i></span>${fmt(r.amount)}</div></td>
+    <td class="num col-mins">${fmt(r.mins)}</td>
+    <td class="date">${fmtDate(r.first)}</td>
+  </tr>`;
+  }).join("");
+  document.querySelectorAll("th").forEach(th => {
+    if (th.dataset.key === sortKey) th.setAttribute("aria-sort", sortDir > 0 ? "ascending" : "descending");
+    else th.removeAttribute("aria-sort");
+  });
+}
+document.querySelectorAll("th").forEach(th => th.addEventListener("click", () => {
+  const k = th.dataset.key;
+  if (k === sortKey) sortDir = -sortDir;
+  else { sortKey = k; sortDir = (k === "amount" || k === "mins") ? -1 : 1; }
+  render();
+}));
+$("q").addEventListener("input", e => { query = e.target.value.trim(); render(); });
+document.querySelectorAll(".seg button").forEach(b => b.addEventListener("click", () => {
+  mode = b.dataset.mode;
+  document.querySelectorAll(".seg button").forEach(x => x.setAttribute("aria-pressed", x === b));
+  document.querySelector('th[data-key="first"]').textContent = mode === "streams" ? "First streamed" : "First played";
+  render();
+}));
+
+// Start: prebuilt data (from build.py) shows the dashboard, otherwise the upload screen
+if (DATA) showDashboard(DATA, false);
+else showUpload();
+</script>
+</body>
+</html>
