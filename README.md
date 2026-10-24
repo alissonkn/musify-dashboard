@@ -4,6 +4,8 @@ See your whole **Spotify** listening history or **YouTube** watch history in one
 
 Choose Spotify or YouTube, upload the zip file you get from them, and the dashboard is built straight away, **entirely in your browser**. Your data is never uploaded anywhere.
 
+https://alissonkn.github.io/musify-dashboard/
+
 ## Features
 
 - **Top 500 songs**, ranked by number of streams, with the artist, album, minutes listened and the date you first streamed each song
